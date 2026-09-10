@@ -1,151 +1,375 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بيانات الجهاز</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background-color: #f4f7f6; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            min-height: 90vh;
-            margin: 0;
-        }
-        .card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 16px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08); 
-            width: 100%; 
-            max-width: 550px; 
-        }
-        h2 { 
-            color: #0056b3; 
-            text-align: center; 
-            border-bottom: 2px solid #eef2f5; 
-            padding-bottom: 15px; 
-            margin-top: 0; 
-            font-size: 22px;
-        }
-        .data-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 12px 8px; 
-            border-bottom: 1px solid #f1f5f9; 
-        }
-        .data-row:last-child {
-            border-bottom: none;
-        }
-        .data-row strong { 
-            color: #475569; 
-            font-size: 15px;
-        }
-        .data-row span { 
-            color: #0f172a; 
-            font-weight: 600; 
-            font-size: 15px;
-            text-align: left;
-            max-width: 60%;
-            word-break: break-word;
-        }
-        #result { 
-            margin-top: 15px; 
-        }
-        .error-msg {
-            color: #e11d48;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecico | منظومة تتبع الأصول والـ QR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f4c81;       /* كحلي أنيق ومهني */
+      --primary-hover: #0a365c;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 620px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* رأس الصفحة والشعار */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-header h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .brand-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* بطاقة البحث */
+    .search-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .input-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1.05rem;
+      outline: none;
+      text-align: center;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+    }
+
+    button.btn-search {
+      padding: 14px 26px;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button.btn-search:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* شريط حالة الاتصال بالشيت */
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f59e0b;
+    }
+
+    .dot.active {
+      background: var(--success);
+    }
+
+    /* بطاقة عرض النتيجة */
+    .result-card {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .result-id {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .result-tag {
+      background: #ecfdf5;
+      color: #059669;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* حقول البيانات */
+    .fields-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .field-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid #edf2f7;
+    }
+
+    .field-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .field-value {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 1rem;
+      max-width: 60%;
+      text-align: left;
+      word-break: break-word;
+    }
+
+    /* رسائل التنبيه */
+    .alert-box {
+      display: none;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fee2e2;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>تفاصيل جهاز الكمبيوتر</h2>
-        <div id="result" style="text-align: center; color: #64748b;">جاري تحميل البيانات...</div>
+<div class="container">
+  
+  <div class="brand-header">
+    <div class="brand-badge">IT ASSET TRACKER</div>
+    <h1>نظام الاستعلام السريع عن الأجهزة</h1>
+    <p>أدخل كود الأصل أو قم بمسح ملصق الـ QR لإظهار المواصفات</p>
+  </div>
+
+  <div class="search-card">
+    <div class="input-box">
+      <input 
+        type="text" 
+        id="qrInput" 
+        placeholder="أدخل كود الـ QR أو رقم الجهاز..." 
+        autocomplete="off"
+        autofocus
+      />
+      <button class="btn-search" onclick="searchAsset()">عرض</button>
+    </div>
+    
+    <div class="status-indicator">
+      <span class="dot" id="sheetStatus"></span>
+      <span id="sheetStatusText">جاري مزامنة بيانات الشيت...</span>
+    </div>
+  </div>
+
+  <div class="alert-box" id="errorBox">لم يتم العثور على أي جهاز مسجل بهذا الرقم!</div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <div>
+        <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">كود الأصل</span>
+        <div class="result-id" id="displayId">--</div>
+      </div>
+      <span class="result-tag">أصل مسجل</span>
     </div>
 
-    <script>
-        // ضع رابط الـ CSV المباشر من جوجل شيت بين العلامتين
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRSgHzJf3Hf9VryXLWbip92e9mfMkf1qv_ynff4sOR5-43REdRSOPq_VW5MZyT_9CaOKdZVoMwS39P/pub?output=csv';
+    <div class="fields-list" id="assetDetails">
+      <!-- تظهر الحقول هنا تلقائياً حسب أعمدة شيت جوجل -->
+    </div>
+  </div>
 
-        async function fetchData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const deviceId = urlParams.get('id');
+</div>
 
-            if (!deviceId) {
-                document.getElementById('result').innerHTML = "<p class='error-msg'>لم يتم التعرف على كود الجهاز. تأكد من مسح الـ QR Code بشكل صحيح.</p>";
-                return;
-            }
+<script>
+  // رابط ملف CSV المنشور من جوجل شيت
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRSgHzJf3Hf9VryXLWbip92e9mfMkf1qv_ynff4sOR5-43REdRSOPq_VW5MZyT_9CaOKdZVoMwS39P/pub?output=csv";
 
-            try {
-                const response = await fetch(csvUrl);
-                const data = await response.text();
-                
-                // دالة لتقسيم السطور والتعامل مع الفواصل بالشكل الصحيح
-                const parseCSV = (str) => {
-                    return str.split('\n').map(row => {
-                        let matches = [];
-                        let match;
-                        let reg = /(?:\"([^\"]*)\"|([^,]+))/g;
-                        while ((match = reg.exec(row)) !== null) {
-                            matches.push(match[1] || match[2] || '');
-                        }
-                        return matches.length ? matches : row.split(',');
-                    });
-                };
+  let inventoryData = [];
 
-                const rows = parseCSV(data);
-                
-                // الصف الأول يحتوي على عناوين الأعمدة (Headers)
-                const headers = rows[0]; 
-                let found = false;
+  // جلب البيانات من الشيت
+  async function fetchSheetData() {
+    const dot = document.getElementById("sheetStatus");
+    const text = document.getElementById("sheetStatusText");
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error("تعذر الاتصال");
+      const rawText = await res.text();
+      
+      parseCSV(rawText);
+      
+      dot.classList.add("active");
+      text.innerText = "البيانات متصلة وجاهزة للبحث";
 
-                for (let i = 1; i < rows.length; i++) {
-                    const columns = rows[i];
-                    
-                    // المطابقة بكود الجهاز في العمود الأول
-                    if (columns[0] && columns[0].trim() === deviceId.trim()) {
-                        let htmlContent = '';
-                        
-                        // التكرار على جميع الأعمدة المتوفرة في الشيت تلقائياً
-                        for (let j = 0; j < headers.length; j++) {
-                            const headerName = headers[j] ? headers[j].trim() : '';
-                            const cellValue = columns[j] ? columns[j].trim() : '';
-                            
-                            // عرض الصف فقط لو العمود له اسم وله قيمة مسجلة
-                            if (headerName && cellValue) {
-                                htmlContent += `
-                                    <div class="data-row">
-                                        <strong>${headerName}:</strong> 
-                                        <span>${cellValue}</span>
-                                    </div>
-                                `;
-                            }
-                        }
-                        
-                        document.getElementById('result').innerHTML = htmlContent || "<p class='error-msg'>لا توجد بيانات مسجلة لهذا الجهاز.</p>";
-                        found = true;
-                        break;
-                    }
-                }
+      // إذا كان الرابط يحتوي على كود مباشر (مثال: ?id=105) يقوم بالبحث فوراً
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryId = urlParams.get('id') || urlParams.get('code');
+      if (queryId) {
+        document.getElementById("qrInput").value = queryId;
+        searchAsset();
+      }
+    } catch (err) {
+      console.error(err);
+      dot.style.background = "#ef4444";
+      text.innerText = "تعذر تحميل البيانات، تأكد من نشر الشيت";
+    }
+  }
 
-                if (!found) {
-                    document.getElementById('result').innerHTML = "<p class='error-msg'>هذا الجهاز غير مسجل في قاعدة البيانات.</p>";
-                }
+  // تحويل ملف CSV إلى كائنات بيانات تلقائياً
+  function parseCSV(text) {
+    const rows = text.split("\n").filter(r => r.trim() !== "");
+    if (rows.length < 2) return;
 
-            } catch (error) {
-                document.getElementById('result').innerHTML = "<p class='error-msg'>حدث خطأ في قراءة البيانات، تأكد من أن رابط جوجل شيت يعمل بشكل صحيح.</p>";
-            }
-        }
+    const headers = rows[0].split(",").map(h => h.trim().replace(/^"|"$/g, ''));
+    
+    inventoryData = rows.slice(1).map(row => {
+      const values = row.split(",").map(v => v.trim().replace(/^"|"$/g, ''));
+      let record = {};
+      headers.forEach((header, index) => {
+        record[header] = values[index] || "—";
+      });
+      return record;
+    });
+  }
 
-        fetchData();
-    </script>
+  // البحث وعرض البيانات
+  function searchAsset() {
+    const query = document.getElementById("qrInput").value.trim().toLowerCase();
+    const resultCard = document.getElementById("resultCard");
+    const errorBox = document.getElementById("errorBox");
+    const assetDetails = document.getElementById("assetDetails");
+    const displayId = document.getElementById("displayId");
+
+    resultCard.style.display = "none";
+    errorBox.style.display = "none";
+
+    if (!query) return;
+
+    // مطابقة الرقم عبر جميع الأعمدة أو أول عمود
+    const matched = inventoryData.find(item => 
+      Object.values(item).some(val => val.toString().trim().toLowerCase() === query)
+    );
+
+    if (matched) {
+      displayId.innerText = query;
+      assetDetails.innerHTML = "";
+
+      for (const [key, value] of Object.entries(matched)) {
+        assetDetails.innerHTML += `
+          <div class="field-row">
+            <span class="field-label">${key}</span>
+            <span class="field-value">${value}</span>
+          </div>
+        `;
+      }
+      resultCard.style.display = "block";
+    } else {
+      errorBox.style.display = "block";
+    }
+  }
+
+  // البحث بالضغط على Enter
+  document.getElementById("qrInput").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") searchAsset();
+  });
+
+  fetchSheetData();
+</script>
+
 </body>
 </html>
