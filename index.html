@@ -4,18 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lecico | IT Asset Tracking System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #004b87;       /* Corporate Lecico Blue */
+      --primary: #004b87;       
       --primary-hover: #003663;
-      --accent: #0ea5e9;
-      --bg: #f1f5f9;
-      --card-bg: rgba(255, 255, 255, 0.92);
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --success: #10b981;
+      --card-bg: rgba(255, 255, 255, 0.92); /* خلفية بيضاء شبه شفافة للبطاقات لتوضيح الكلام الأسود */
+      --text: #000000;          /* لون النص أسود بالكامل كما طلبت */
+      --text-muted: #222222;    /* رمادي غامق جداً للنصوص الفرعية */
+      --border: #cbd5e1;
+      --success: #059669;
       --radius: 16px;
     }
 
@@ -27,7 +25,6 @@
     }
 
     body {
-      background-color: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -37,24 +34,22 @@
       padding: 40px 16px;
       position: relative;
       overflow-x: hidden;
+
+      /* إعدادات الصورة لتملأ الشاشة بوضوح تام */
+      background-image: url('logo.png.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      background-attachment: fixed;
     }
 
-    /* خلفية مائية لشعار الشركة في منتصف الشاشة */
+    /* طبقة تظليل خفيفة جداً فوق الصورة بأكملها (اختيارية، لتقليل سطوع الشاشة فقط) */
     body::before {
       content: "";
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 480px;
-      height: 480px;
-      background-image: url('logo.png.jpg'); /* يمكنك استبدال الرابط بملف الشعار الخاص بك logo.png */
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      opacity: 0.04; /* شفافية ناعمة لا تؤثر على وضوح القراءة */
-      pointer-events: none;
-      z-index: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.3); /* تبييض خفيف بنسبة 30% فقط لترك اللوجو واضح */
+      z-index: -1;
     }
 
     .container {
@@ -71,48 +66,47 @@
     .brand-header {
       text-align: center;
       margin-bottom: 12px;
-    }
-
-    .company-logo {
-      max-height: 44px;
-      margin-bottom: 16px;
-      object-fit: contain;
+      background: rgba(255, 255, 255, 0.85); /* خلفية بسيطة للعنوان ليكون مقروءاً */
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
 
     .brand-badge {
       display: inline-block;
       background: #e0f2fe;
       color: var(--primary);
-      font-weight: 700;
-      font-size: 0.75rem;
+      font-weight: 800;
+      font-size: 0.8rem;
       letter-spacing: 1px;
-      padding: 4px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       text-transform: uppercase;
       margin-bottom: 8px;
     }
 
     .brand-header h1 {
-      font-size: 1.65rem;
+      font-size: 1.7rem;
       font-weight: 800;
-      color: var(--primary);
+      color: #000000; /* العنوان أسود */
       letter-spacing: -0.5px;
     }
 
     .brand-header p {
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 1rem;
+      font-weight: 700;
       margin-top: 6px;
     }
 
-    /* بطاقة البحث والـ Input */
+    /* بطاقات المحتوى */
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: var(--radius);
-      box-shadow: 0 12px 30px -10px rgba(0, 75, 135, 0.08);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* ظل لتمييز البطاقة عن الخلفية */
       padding: 24px;
     }
 
@@ -126,9 +120,10 @@
       padding: 14px 18px;
       border: 2px solid var(--border);
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 1.05rem;
       outline: none;
-      font-weight: 600;
+      font-weight: 800;
+      color: #000000; /* لون الكتابة داخل المربع أسود */
       transition: all 0.2s ease;
       background: #fff;
     }
@@ -144,15 +139,14 @@
       color: #fff;
       border: none;
       border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 1rem;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     button.btn-search:hover {
       background-color: var(--primary-hover);
-      box-shadow: 0 4px 12px rgba(0, 75, 135, 0.2);
     }
 
     /* مؤشر الاتصال بالبيانات */
@@ -161,15 +155,15 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
       margin-top: 14px;
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #f59e0b;
     }
@@ -194,25 +188,24 @@
     }
 
     .result-id-label {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-muted);
-      letter-spacing: 0.5px;
     }
 
     .result-id {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--primary);
     }
 
     .badge-verified {
-      background: #ecfdf5;
-      color: #059669;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 5px 12px;
+      background: #d1fae5;
+      color: #047857;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 6px 14px;
       border-radius: 20px;
       border: 1px solid #a7f3d0;
     }
@@ -221,31 +214,30 @@
     .fields-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .field-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
-      background-color: #f8fafc;
+      padding: 14px 18px;
+      background-color: rgba(248, 250, 252, 0.9);
       border-radius: 10px;
-      border: 1px solid #edf2f7;
+      border: 1px solid #e2e8f0;
     }
 
     .field-label {
       color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.9rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
     }
 
     .field-value {
-      font-weight: 700;
-      color: var(--text);
-      font-size: 0.95rem;
+      font-weight: 800;
+      color: #000000; /* البيانات تظهر باللون الأسود الواضح */
+      font-size: 1.05rem;
       max-width: 60%;
       text-align: right;
       word-break: break-word;
@@ -254,14 +246,14 @@
     /* صندوق التنبيه */
     .alert-box {
       display: none;
-      padding: 16px;
+      padding: 18px;
       border-radius: 12px;
       text-align: center;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 800;
+      font-size: 1rem;
       background: #fef2f2;
-      color: #dc2626;
-      border: 1px solid #fee2e2;
+      color: #b91c1c;
+      border: 2px solid #fca5a5;
     }
 
     @keyframes slideUp {
@@ -312,14 +304,14 @@
     </div>
 
     <div class="fields-list" id="assetDetails">
-      <!-- Generated rows based on Google Sheet headers -->
+      <!-- ستظهر البيانات هنا تلقائياً -->
     </div>
   </div>
 
 </div>
 
 <script>
-  // ضع رابط الـ CSV المنشور من جوجل شيت هنا
+  // لا تنسَ إضافة الرابط الخاص بشيت جوجل مكان هذه الجملة
   const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTRSgHzJf3Hf9VryXLWbip92e9mfMkf1qv_ynff4sOR5-43REdRSOPq_VW5MZyT_9CaOKdZVoMwS39P/pub?output=csv";
 
   let inventoryData = [];
@@ -337,7 +329,6 @@
       dot.classList.add("active");
       text.innerText = "System online and synced with Google Sheets";
 
-      // البحث التلقائي عند مسح كود الـ QR المزود بـ Parameter مثل (?id=105)
       const urlParams = new URLSearchParams(window.location.search);
       const queryId = urlParams.get('id') || urlParams.get('code');
       if (queryId) {
